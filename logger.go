@@ -10,8 +10,10 @@ import (
 	"time"
 )
 
+// FormatterFunc user defined formatter func
 type FormatterFunc func(w io.Writer, r *http.Request, sentBytes uint64, elapsedTime time.Duration)
 
+// DefaultFormatter default formatter func
 var DefaultFormatter FormatterFunc = func(w io.Writer, r *http.Request, sentBytes uint64, elapsedTime time.Duration) {
 	fmt.Fprintf(w, "[%.2fms %s] %s %s", elapsedTime.Seconds()*1000, humanize.Bytes(sentBytes), r.Method, r.URL.Path)
 }
@@ -19,6 +21,11 @@ var DefaultFormatter FormatterFunc = func(w io.Writer, r *http.Request, sentByte
 // Logger simple func for wrapping http.Handler and log to stderr
 func Logger(h http.Handler) http.Handler {
 	return LoggerWithWriterAndFormatter(h, os.Stderr, DefaultFormatter)
+}
+
+// LoggerWithFormatter wrapping func with user defined formatter
+func LoggerWithFormatter(h http.Handler, formatter FormatterFunc) http.Handler {
+	return LoggerWithWriterAndFormatter(h, os.Stderr, formatter)
 }
 
 // LoggerWithWriter func for wrapping http.Handler and user defined output io.Writer
