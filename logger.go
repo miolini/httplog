@@ -15,7 +15,7 @@ type FormatterFunc func(w io.Writer, r *http.Request, sentBytes uint64, elapsedT
 
 // DefaultFormatter default formatter func
 var DefaultFormatter FormatterFunc = func(w io.Writer, r *http.Request, sentBytes uint64, elapsedTime time.Duration) {
-	fmt.Fprintf(w, "%s [%.2fms %s] %s %s\n", time.Now().Format("2005-Mo-2 15:04:05"),
+	fmt.Fprintf(w, "%s [%.2fms %s] %s %s\n", time.Now().Format("2006-01-02 15:04:05"),
 		elapsedTime.Seconds()*1000, humanize.Bytes(sentBytes), r.Method, r.URL.Path)
 }
 
